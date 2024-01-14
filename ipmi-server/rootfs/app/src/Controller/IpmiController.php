@@ -24,6 +24,7 @@ class IpmiController
     const COMMAND_TIMEOUT = 50;
     const DEFAULT_PORT = 623;
     const DEFAULT_USERNAME = 'ADMIN';
+    const DEFAULT_LEVEL = 'ADMINISTRATOR';
 
     public function index(Request $request): JsonResponse
     {
@@ -148,13 +149,14 @@ class IpmiController
         $ipmi = [
             'host' => $host,
             'port' => $query->get('port', self::DEFAULT_PORT),
+            'level' => $query->get('level', self::DEFAULT_LEVEL),
             'user' => $query->get('user', self::DEFAULT_USERNAME),
             'password' => $query->get('password', '')
         ];
 
         $cmd = ['ipmitool'];
 
-        array_push($cmd, '-H', $ipmi['host'], '-p', $ipmi['port'], '-U', $ipmi['user'], '-P', $ipmi['password']);
+        array_push($cmd, '-H', $ipmi['host'], '-p', $ipmi['port'], '-L', $ipmi['level'], '-U', $ipmi['user'], '-P', $ipmi['password']);
 
         return $cmd;
     }
